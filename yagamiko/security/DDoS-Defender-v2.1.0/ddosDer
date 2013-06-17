@@ -1,0 +1,129 @@
+#!/bin/sh
+##############################################################################
+# DDoS-Defender version 2.1.0 Author: Sunshine Koo <350311204@qq.com>        #
+# Modfiy: guzhiqiang, 2012-2-11 11:45:30                                     #
+# Blog: http://www.hit008.com , http://www.ywjt.org                          #
+##############################################################################
+# This program is distributed under the "Artistic License" Agreement         #
+# The LICENSE file is located in the same directory as this program. Please  #
+# read the LICENSE file before you make copies or distribute this program    #
+##############################################################################
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:/usr/local/DDos
+export PATH
+CONF_FILE="/usr/local/DDos/conf/ddos.conf"
+
+if [ -f "$CONF_FILE" ] && [ ! "$CONF_FILE" == "" ]; then
+	source $CONF_FILE
+        source $CORE_NETSTAT
+else
+	header >> $LOGS_FILE
+	echo "\$CONF_FILE not found." |tee -a $LOGS_FILE
+	exit 1
+fi
+
+DDOS_DAEMON="/usr/local/DDos/sbin/ddos_daemon"
+FLUSH_DAEMON="/usr/local/DDos/sbin/ddos_flush"
+DDOS_PID="$PROC_DIR"logs/ddos_daemon.SOCK
+FLUSH_PID="$PROC_DIR"logs/ddos_flush.SOCK	
+
+header()
+{
+	echo "DDoS-Defender version 2.1.0"
+	echo "Copyright (C) 2010-2012,Sunshine Koo."
+}
+
+do_start() {
+        $CHECKIPTABLES 1>/dev/null
+        if [ `pgrep -f 'ddos_daemon'|wc -l` -eq 0 ];then
+	       nice -n -4 $DDOS_DAEMON &
+           nice -n -4 $FLUSH_DAEMON &
+        else
+		   echo -e "ddos_daemon already running!"
+		   exit 1
+		fi
+}
+
+do_stop() {
+        if [ `pgrep -f 'ddos_daemon'|wc -l` -eq 0 ];then
+		    echo -e "ddos_daemon not running!"
+	else
+                    #kill -9 `cat $DDOS_PID`
+					killall ddos_daemon
+        fi 
+         
+        if [ `pgrep -f 'ddos_flush'|wc -l` -eq 0 ];then
+                    echo -e "ddos_flush not running!"
+        else      
+                    #kill -9 `cat $FLUSH_PID`
+					killall ddos_flush
+        fi
+      
+        if [ `pgrep -f 'ddos_flush'|wc -l` -ne 0 ]&&[ `pgrep -f 'ddos_daemon'|wc -l` -ne 0 ];then
+		    #kill -9 `cat $DDOS_PID`
+            #kill -9 `cat $FLUSH_PID`
+			killall ddos_daemon
+			killall ddos_flush
+   	  	    rm -rf $DDOS_PID $FLUSH_PID
+	fi
+}
+
+do_restart() {
+        do_stop
+        do_start
+}
+
+do_status() {
+        header
+                echo "------------------------------CROND LIST--------------------------------"
+		echo "IP                Y/m/d       H:M:S     Unix/time      Active"
+                if [ -e $CROND_LIST ];then
+		   awk {'printf "%-18s%-12s%-10s%-15s%-7s\n",$1,$2,$3,$4,$5'} $CROND_LIST
+		fi
+		echo "------------------------------DROP LIST-----------------------------"
+		echo "target    prot opt source              destination"
+		iptables --list|grep 'DROP'|awk {'printf "%-10s%-5s%-4s%-20s%-11s\n",$1,$2,$3,$4,$5'}
+		echo "------------------------------NETSTAT TOP30----------------------------"
+                echo "Total   Local Address   PORT   Foreign Address   State"
+                core_netstat|grep -E "\[${MONT_PORT}\]"|grep -vE $IGNORE_IP|sort|uniq -c|sort -rn|awk {'printf "%-8s%-16s%-7s%-18s%-6s\n",$1,$2,$3,$4,$5'}|head -30
+		echo "------------------------------------------------------------------------"
+                if [ `pgrep -f 'ddos_daemon'|wc -l` -ne 0 ];then
+                   echo -n ">>> ddos_daemon already running! "
+                else
+                   echo -n ">>> ddos_daemon not running! "
+                fi
+                if [ `pgrep -f 'ddos_flush'|wc -l` -ne 0 ];then
+                   echo  " ddos_flush already running! <<<"
+                else
+                   echo " ddos_flush not running! <<<"
+                fi
+
+}
+
+case "$1" in
+  start)
+        echo -e "Starting ddos_daemon ..."
+        do_start
+		echo "Done."
+        ;;
+  stop)
+        echo -e "Stopping ddos_daemon ..."
+        do_stop
+		echo "Done."
+        ;;
+  restart)
+        echo -e "Restarting ddos_daemon ..."
+        do_restart
+		echo "Done."
+        ;;
+  status)
+        while true
+        do
+        clear
+        do_status
+        sleep 5
+        done
+        ;;		
+  *)
+        echo $"Usage: $prog {start|stop|restart|status}"
+        exit 1
+esac
