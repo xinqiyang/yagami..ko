@@ -1,6 +1,3 @@
-#!/usr/bin/env lua
-
-
 module('yagami.vars', package.seeall)
 
 require 'yagami.functional'

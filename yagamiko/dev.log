@@ -1,5 +1,28 @@
 dev log by xinqiyang
 
+TODO 
+add https support 
+do think about twitter api list  
+add api version of the list
+
+
+
+20130909
+format source of the yagamiko, remove old source
+fix logger get error in  openresty 1.4.2 
+
+
+
+20130811
+update openresty to 1.4.2 
+
+20130809 
+start update yagamiko project 
+	//update redis settings 
+	//add pbdata's backend project,upload and write data to file.
+
+
+
 20130619  close lua code cache, when in dev mode.
 add  resty.http
 add  tidy configuration 
@@ -11,12 +34,6 @@ add  redis sharding setting
 add  weedfs  image/audio storage
 	 weedfs，http://code.google.com/p/weed-fs/
 
-
-
-
-
-
 question
-
 	logger:i  write a log when add data
 	

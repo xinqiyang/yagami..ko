@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module("test", package.seeall)
 
 local util    = require('yagami.util')

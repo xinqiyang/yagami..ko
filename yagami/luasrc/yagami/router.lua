@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module('yagami.router',package.seeall)
 
 require 'yagami.functional'
@@ -27,9 +25,9 @@ function _map(route_table, route_order, uri, func_name)
         table_insert(route_order, uri)
         -- table_sort(route_order, route_sorter) -- sort when merge!
     else
-        local error_info = "YAGAMI URL Mapping Error:[" .. uri .. "=>" .. func_name .. "] function or controller not found in module: " .. mod_name
-        logger:error(error_info)
-        ngx.log(ngx.ERR, error_info)
+        --local error_info = "YAGAMI URL Mapping Error:[" .. uri .. "=>" .. func_name .. "] function or controller not found in module: " .. mod_name
+        -- if is online then open 
+        --ngx.log(ngx.ERR, error_info)
     end
 end
 
@@ -37,8 +35,7 @@ function map(route_table, route_order, uri, func_name)
     local ret, err = pcall(_map, route_table, route_order, uri, func_name)
     if not ret then
         local error_info = "YAGAMI URL Mapping Error:[" .. uri .. "=>" .. func_name .. "] " .. err
-        logger:error(error_info)
-        ngx.log(ngx.ERR, error_info)
+        --ngx.log(ngx.ERR, error_info)
     end
 end
 
@@ -55,7 +52,7 @@ function setup()
         yagami.vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'] = {}
         yagami.vars.get(app_name,"ROUTE_INFO")['ROUTE_ORDER'] = {}
     end
-    yagami.vars.get(app_name, "ROUTE_INFO").logger = getfenv(2).__LOGGER
+    --yagami.vars.get(app_name, "ROUTE_INFO").logger = getfenv(2).__LOGGER
     yagami.vars.get(app_name, "ROUTE_INFO")['map'] = yagami.functional.curry(
         map,
         yagami.vars.get(app_name,"ROUTE_INFO")['ROUTE_MAP'],

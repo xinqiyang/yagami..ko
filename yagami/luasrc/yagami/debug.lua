@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module('yagami.debug',package.seeall)
 
 local front      = require('yagami.front')
@@ -93,4 +91,3 @@ function debug_info2text()
     end
     return ret
 end
-

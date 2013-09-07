@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module("yagami.logger", package.seeall)
 
 local string_sub = string.sub

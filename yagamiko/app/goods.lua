@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 --
 -- goods moudle
 --
@@ -8,12 +6,13 @@ module("goods",package.seeall)
 
 
 local JSON = require("cjson")
+local resty_uuid = require("resty.uuid")
 
 
 -- do set goods reset 
 -- set to hmset
 function bootstrap(req,resp)
-	logger:i("start goods")
+	req:read_body()
 	local ok = 404
 	local err = "System error"
 	if req.method == 'POST' then 
@@ -31,22 +30,39 @@ function bootstrap(req,resp)
 end
 
 
+-- goods entity
+-- field name,imgid,desc,price,tag
+-- 
+function post(req)
+	local code = 200
+	local id = resty_uuid:gen8();
+	-- param check 
+
+
+	-- req.uri_args['name']
+
+	
+	-- write to redis
+
+	
+	-- return result 
+
+	return code,id
+end
+
+
 function get(req)
 
-	ngx.say('this is good get')
+	-- get simple 
 
+	-- get list 
+
+	-- get 
 
 	return 200,"GET OK"
 end 
 
 
-function post(req)
-
-    ngx.say('this is good post ')
-
-
-	return 200,"POST OK"
-end
 
 
 function put(req)

@@ -1,7 +1,7 @@
 #!/usr/bin/env lua
 
 --
--- brand moudle
+-- tag moudle
 --
 
 module("tag",package.seeall)
@@ -13,6 +13,7 @@ local JSON = require("cjson")
 -- do set goods reset 
 -- set to hmset
 function bootstrap(req,resp)
+	req:read_body();
 	local ok = 500
 	local err = "System error"
 	if req.method == 'POST' then 

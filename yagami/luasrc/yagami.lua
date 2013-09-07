@@ -1,11 +1,7 @@
-#!/usr/bin/env lua
-
 --
 -- Yagami Framework Core 
 --
 --
-
-
 local string_match   = string.match
 local package_loaded = package.loaded
 
@@ -29,8 +25,8 @@ function is_inited(app_name, init)
         r_G['yagami_inited'][app_name] = init
         if init then
             -- put logger into _G
-            local logger = require("yagami.logger")
-            r_G["logger"] = logger.logger()
+            --local logger = require("yagami.logger")
+            --r_G["logger"] = logger.logger()
         end
     end
 end
@@ -56,7 +52,7 @@ function setup_app()
     ygm_util.setup_app_env(ygm_home, app_name, app_path,
                           ygm_vars.vars(app_name))
 
-    local logger = require("yagami.logger")
+    --local logger = require("yagami.logger")
         
     local config = ygm_util.loadvars(app_config)
     
@@ -71,8 +67,8 @@ function setup_app()
             local subpath = t.path
             package.path = subpath .. '/app/?.lua;' .. package.path
             local env = setmetatable({__CURRENT_APP_NAME__ = k,
-                                      __MAIN_APP_NAME__ = app_name,
-                                      __LOGGER = logger.logger()},
+                                      __MAIN_APP_NAME__ = app_name},
+                                      --__LOGGER = logger.logger()},
                                      {__index = _G})
             setfenv(assert(loadfile(subpath .. "/routing.lua")), env)()
         end
@@ -80,8 +76,8 @@ function setup_app()
 
     -- load the main-app's routing
     local env = setmetatable({__CURRENT_APP_NAME__ = app_name,
-                              __MAIN_APP_NAME__ = app_name,
-                              __LOGGER = logger.logger()},
+                              __MAIN_APP_NAME__ = app_name},
+                              --__LOGGER = logger.logger()},
                              {__index = _G})
     --set routing                         
     setfenv(assert(loadfile(app_path .. "/routing.lua")), env)()

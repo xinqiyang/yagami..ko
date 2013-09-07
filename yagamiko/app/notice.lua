@@ -1,18 +1,18 @@
 #!/usr/bin/env lua
 
+-- Copyright (C) 2013 by xinqiyang
 --
--- brand moudle
+-- notice moudle
 --
 
 module("notice",package.seeall)
 
-
 local JSON = require("cjson")
-
 
 -- do set goods reset 
 -- set to hmset
 function bootstrap(req,resp)
+	req:read_body()
 	local ok = 500
 	local err = "System error"
 	if req.method == 'POST' then 
@@ -65,5 +65,6 @@ function delete(req)
 
 	return 200,"DELETE OK"
 end
+
 
 

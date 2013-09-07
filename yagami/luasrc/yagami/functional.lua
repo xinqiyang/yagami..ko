@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module('yagami.functional',package.seeall)
 
 local table_insert = table.insert

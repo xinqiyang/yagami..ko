@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module('yagami.front', package.seeall)
 
 DEBUG_INFO_CSS=[==[

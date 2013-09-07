@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module('yagami.response',package.seeall)
 
 local util    = require('yagami.util')
@@ -37,7 +35,8 @@ function Response:do_last_func()
     if last_func then
         local ok, err = pcall(last_func)
         if not ok then
-            logger:error('Error while doing last func: %s', err)
+            --logger:error('Error while doing last func: %s', err)
+            ngx.log(ngx.ERR,'Error while doing last func:'..err)
         end
     end
 end
@@ -51,7 +50,7 @@ function Response:do_defers()
         for _, f in ipairs(self._defer) do
             local ok, err = pcall(f)
             if not ok then
-                logger:error('Error while doing defers: %s', err)
+                ngx.log(ngx.ERR,'Error while doing defers:'..err)
             end
         end
     else
@@ -62,7 +61,6 @@ end
 function Response:write(content)
     if self._eof==true then
         local error_info = "Yagami WARNING: The response has been explicitly finished before."
-        logger:w(error_info)
         ngx.log(ngx.ERR, error_info)
         return
     end
@@ -73,7 +71,6 @@ end
 function Response:writeln(content)
     if self._eof==true then
         local error_info = "Yagami WARNING: The response has been explicitly finished before."
-        logger:w(error_info)
         ngx.log(ngx.ERR, error_info)
         return
     end
@@ -137,8 +134,7 @@ function Response:error(info)
         self.headers['Content-Type'] = 'text/html; charset=utf-8'
         self:write(error_info)
     end
-    logger:e(error_info)
-    --ngx.log(ngx.ERR, error_info)
+    ngx.log(ngx.ERR, error_info)
 end
 
 

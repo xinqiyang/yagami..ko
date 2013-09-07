@@ -2,8 +2,6 @@
 
 module("stat",package.seeall)
 
-local util = require('ygmutils')
-
 --count service 
 function countService(funcname)
 	-- body
@@ -13,7 +11,8 @@ function countService(funcname)
 	local ok, err = red:connect("127.0.0.1", 6379)
 
 	if not ok then
-		logger:i({"failed to connect: ", err})
+		
+		
 	end
 
 	local day = os.date("%Y%m%d",time);
@@ -28,7 +27,7 @@ function countService(funcname)
 
 	for key,val in ipairs(Field) do
 		local ck = k..funcname..":"..val
-		--logger:i("countserver key:  "..ck.."\n")
+
 		red:incrby(ck,1)
 	end
 

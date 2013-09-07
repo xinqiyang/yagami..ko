@@ -1,8 +1,6 @@
-#!/usr/bin/env lua
-
 module('yagami.controller',package.seeall)
 
-local yagami.debug=require("yagami.debug")
+local yagami.debug = require("yagami.debug")
 
 function default_handler(request,response,...)
     ngx.exit(403)

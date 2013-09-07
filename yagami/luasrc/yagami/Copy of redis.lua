@@ -1,9 +1,6 @@
+#!/usr/bin/env lua
+
 module("yagami.redis",package.seeall)
-
-_VERSION = '0.10'
-
-local class = redis
-local mt = { __index = class }
 
 local util = require("yagami.util")
 local Redis = require("resty.redis")
@@ -11,16 +8,6 @@ local Redis = require("resty.redis")
 --set default set of redis
 local defaultSet = "redis_set01"
 local redis_pool_size = 100
-
---get new instance
-function new(self)
-	local redisclient, err = Redis:new()
-	if not redisclient then 
-		return nil,err
-	end
-	return setmetatable({ redis = redisclient },mt)
-end
-
 
 
 -- add a new redis cluster instance 
@@ -39,7 +26,7 @@ function redis_master(set)
     client:set_timeout(tonumber(t_set.timeout)) -- 3 seconds
     local ok, err = client:connect(t_set.master,tonumber(t_set.masterport))
     if not ok then
-    	--logger.e("Redis Master is down: "..host..':'..port)
+    	logger.e("Redis Master is down: "..host..':'..port)
         return nil
     end
     return client
@@ -66,19 +53,10 @@ function redis_slave(set)
     
     if not ok then
     	-- log error 
-    	--logger.e("Redis Slave is down: "..host..':'..port)
+    	logger.e("Redis Slave is down: "..host..':'..port)
         return nil
     end
     return client
 end
-
-
--- to prevent use of casual module global variables
-getmetatable(class).__newindex = function (table, key, val)
-    error('attempt to write to undeclared variable "' .. key .. '"')
-end
-
-
-
 
 

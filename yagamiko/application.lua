@@ -9,12 +9,28 @@ debug={
     to="response", -- "ngx.log"
 }
 
+-- system version
+version={
+    name = "freeflare",
+    logo = "./images/logo.png",
+    icon = "./images/icon.png",
+    url = "http://www.freeflare.com",
+	version="1.0.0",
+	iphone="1.0.1",
+	android="1.0.2",
+	web="1.0.1",	
+	mis="1.0.0",
+}
 
 mysql_set01 = {
 	master= "127.0.0.1",
 	masterport= 3306,
-	slave="127.0.0.1",
-	slaveport="3307",
+    database="luatest",
+    username="luatest",
+    password="sdTndfQfMa99Qa8L",
+	slave="127.0.0.1:3306 127.0.0.1:3306",
+	timeout=1000,
+	max_packet_size = 1024*1024
 }
 
 -- redis cluster  
@@ -51,8 +67,10 @@ config={
     
 }
 
+-- ipconnection select
+-- TODO need to change 
 ip = {
-	ip="/source/freeflare/server/yagamiko/conf/ip/qqwry.dat",	
+	ip="/freeflare/trunk/foundation/server/lua/yagamiko/conf/ip/qqwry.dat",	
 }
 
 

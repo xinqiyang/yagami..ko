@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 module('yagami.request',package.seeall)
 
 local string_len = string.len

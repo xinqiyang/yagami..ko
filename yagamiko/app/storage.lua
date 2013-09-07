@@ -14,7 +14,7 @@ local upload = require("resty.upload")
 function savetoweedfs(req,resp)
     --add volidate
     --
-    logger:d("storage request started!")
+    --logger:d("storage request started!")
 
     -- doo check md5 of the file 
 
@@ -101,6 +101,95 @@ function savetoweedfs(req,resp)
             -- clear temp file by crontab job
             --os.execute('rm -rf '..file_name)
 
+        elseif typ == "eof" then
+            break
+        else
+
+        end
+
+    end
+
+
+end
+
+
+
+function internalStorage(req)
+    --add volidate
+    --logger:d("intetnal storage request started!")
+
+    local id 
+    local chunk_size = 4096
+    local form = upload:new(chunk_size)
+
+    local weedfsurl = util.get_config('weedfs')
+    
+    if weedfsurl == nil then
+        local info = 'weedfs master url is empty.'  
+        --logger:e(info) -- error 
+        return
+    end
+
+    local hc = http:new()
+    local ok,code,headers,status,body = hc:request {
+            url = weedfsurl.master,
+            method = "GET",
+            timeout = 1000,
+    }
+
+    if code == 200 then 
+       local ret = JSON.decode(body)
+       id = ret.fid
+    else
+       ngx.log(ngx.ERR,"get weeds id error: "..code)
+       return 
+    end
+    
+    local file_name = weedfsurl.tmplocal..uuid:gen8()
+    
+    local file
+    local resty_md5 = require "resty.md5"
+    local md5 = resty_md5:new()    
+    local chunk_size = 4096
+
+    while true do
+        local typ, res, err = form:read()
+        if not typ then
+             ngx.log(ngx.ERR,"failed to read: "..err)
+             return 
+        end
+        if typ == "header" then
+            if file_name then
+                file = io.open(file_name, "w+")
+                if not file then
+                    ngx.log(ngx.ERR,"failed to open file "..file_name)
+                    return
+                end
+            end
+         elseif typ == "body" then
+            if file then
+                file:write(res)
+                --write data to hdfs or other
+                md5:update(res)
+            end
+        elseif typ == "part_end" then
+            file:close()
+            file = nil
+            local md5sum = md5:final()
+            md5:reset()
+            
+            -- save to resty 
+            local cmd = 'curl -F file=@'..file_name..' '..weedfsurl.volume..id
+            local ic = io.popen(cmd)
+            local ret = ic:read("*all")
+            
+            --return result 
+            local str = require "resty.string"
+            local md5str = str.to_hex(md5sum)
+
+            -- save result to redis then return 
+            -- id,md5,ret,length   
+            return id,md5str,ret
         elseif typ == "eof" then
             break
         else

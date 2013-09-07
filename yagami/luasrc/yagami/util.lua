@@ -1,5 +1,3 @@
-#!/usr/bin/env lua
-
 local json          = require("cjson")
 
 local math_floor    = math.floor
@@ -147,13 +145,13 @@ end
 function read_jsonresponse(sock)
     local r, err = sock:receive(4)
     if not r then
-        logger:warn('Error when receiving from socket: %s', err)
+        ngx.log(ngx.ERR,'Error when receiving from socket: %s', err)
         return
     end
     local len = parseNetInt(r)
     data, err = sock:receive(len)
     if not data then
-        logger:error('Error when receiving from socket: %s', err)
+        ngx.log(ngx.ERR,'Error when receiving from socket: %s', err)
         return
     end
     return json.decode(data)
@@ -237,11 +235,11 @@ end
 
 -- traceback function , log debug
 function traceback()
-    logger:e(require("debug").traceback())
+    ngx.log(ngx.ERR,require("debug").traceback())
 end
 
 function table_print(t)
     local s1="\n* Table String:"
     local s2="\n* End Table"
-    logger:e(s1 .. strify(t) .. s2)
+    ngx.log(ngx.ERR,s1 .. strify(t) .. s2)
 end

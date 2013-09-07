@@ -31,6 +31,8 @@ local brshift       = Bit.rshift
 local null          = ngx.null
 local tcp           = ngx.socket.tcp
 
+
+
 -- ////////////////////////////////////////////////////////////////////////////////
 -- Request
 
@@ -486,7 +488,7 @@ end
 
 -- traceback function , log debug
 function traceback()
-    logger:e(require("debug").traceback())
+    ngx.log(ngx.ERR,require("debug").traceback())
 end
 
 -- strify 
@@ -514,7 +516,7 @@ function strify(o) return _strify(o,1,"",{}) end
 function table_print(t)
     local s1="\n* Table String:"
     local s2="\n* End Table"
-    logger:e(s1 .. strify(t) .. s2)
+    ngx.log(ngx.ERR,s1 .. strify(t) .. s2)
 end
 
 

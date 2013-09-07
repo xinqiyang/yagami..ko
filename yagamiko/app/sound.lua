@@ -1,6 +1,3 @@
-#!/usr/bin/env lua
-
-
 module("sound", package.seeall)
 
 local JSON = require("cjson")
@@ -143,7 +140,7 @@ function soundmake( req,resp )
 			local k = "sound:"..newsid
 			red:set(k,body)
 
-			logger:i("----save to redis key:"..k)
+			--logger:i("----save to redis key:"..k)
 
 			-- save client info to redis
 			local kinfo = "info:"..newsid
@@ -159,7 +156,7 @@ function soundmake( req,resp )
 			local pubdate = runyear..nowmonth..runday
 			-- add time and newsid to list
 			local cacheKey = "list:news:"..pubdate
-			logger:i("news info cache key: "..cacheKey.."   "..newsid)
+			--logger:i("news info cache key: "..cacheKey.."   "..newsid)
 			red:lpush(cacheKey,newsid)
 			--count the service
 			countService("soundmake")
@@ -216,7 +213,7 @@ function userstat()
 
 end
 
-
+--@todo remove to the uitl 
 function urlencode(str)
 	if (str) then
 		str = string.gsub (str, "\n", "\r\n")
@@ -227,7 +224,7 @@ function urlencode(str)
 	return str
 end
 
-
+--@todo remove to util
 function urldecode(str)
 	str = string.gsub (str, "+", " ")
 	str = string.gsub (str, "%%(%x%x)",
