@@ -5,18 +5,20 @@ yagamiko is a api server project implementation by lua &amp;&amp; nginx ( openre
 
 Project Struct
 ========
-luajitlib -> /usr/local/luajit/lib     luajit library
-lualib -> /usr/local/lualib/           lualib library  
-yagami                                 yagami framework
-yagamiko                               yagamiko backend http api server
+luajitlib -> /usr/local/luajit/lib     luajit library <br />
+lualib -> /usr/local/lualib/           lualib library <br />
+yagami                                 yagami framework <br />
+yagamiko                               yagamiko backend http api server <br />
 
 
 How to use
 ========
-chmod -R 777 /path/yagamiko/nginx_runtime
-cd /path/yagamiko && ./bin/start.sh    start service
-cd /path/yagamiko && ./bin/reload.sh   reload service
-cd /path/yagamiko && ./bin/stop.sh     stop service
+chmod -R 777 /path/yagamiko/nginx_runtime <br />
+cd /path/yagamiko && ./bin/start.sh    start service <br />
+cd /path/yagamiko && ./bin/reload.sh   reload service <br />
+cd /path/yagamiko && ./bin/stop.sh     stop service    <br />
+
+
 
   
 
