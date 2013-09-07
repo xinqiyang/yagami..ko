@@ -3,6 +3,21 @@ yagamiko
 
 yagamiko is a api server project implementation by lua &amp;&amp; nginx ( openresty) .
 
+
+YagamiKo From
+=======
+Yagami(八神) is a role of The king of fighters'97. He is a strong and creazy man when fighting.<br />
+I wish Yagami will ko all of the other webapp frameworks.<br />
+That's go.<br>
+
+Include Features
+========
+Waf<br />
+Redis,MySQL<br />
+Weedfs<br />
+Ip,GEO <br />
+UUID,OAuth<br />
+
 Project Struct
 ========
 luajitlib -> /usr/local/luajit/lib     luajit library <br />
