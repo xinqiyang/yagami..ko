@@ -3,7 +3,7 @@
 # set global variables   project name and path
 export YGM_APP_NAME=yagamiko
 export OPENRESTY_HOME=/usr/local
-export YAGAMI_HOME=/source/freeflare/server/yagami
+export YAGAMI_HOME=/freeflare/trunk/foundation/server/lua/yagami
 
 #echo $OPENRESTY_HOME
 #echo $YAGAMI_HOME

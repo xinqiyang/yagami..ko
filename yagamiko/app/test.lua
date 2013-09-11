@@ -1,7 +1,6 @@
 module("test", package.seeall)
 
 local util    = require('yagami.util')
-local ygmutil = require('ygmutils')
 local JSON = require("cjson")
 local Redis = require("resty.redis")
 
@@ -12,9 +11,9 @@ local ygmredis = require("yagami.redis")
 function test(req,resp)
     
 
-    local s = require('storage')
-    local code = s.save()
-    ngx.say(code)
+    --local s = require('storage')
+    --local code = s.save()
+    --ngx.say(code)
     ngx.exit(200)
     --k = 'testabc'; v = 'valuetest'
     --ygmredis:redis_slave()
@@ -37,7 +36,7 @@ end
 
 
 function hello(req, resp, name)
-    logger:i("hello request started!")
+
     if req.method=='GET' then
         resp:writeln('Host: ' .. req.host)
         resp:writeln('Hello, ' .. ngx.unescape_uri(name))
@@ -52,7 +51,6 @@ function hello(req, resp, name)
         resp.headers['Content-Type'] = 'application/json'
         resp:writeln(JSON.encode(req.post_args))
     end
-    logger:i("hello request completed!")
 end
 
 

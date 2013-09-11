@@ -1,39 +1,9 @@
 local router = require('yagami.router')
 router.setup()
 
----------------------------------------------------------------------
+-- for test
+map('^/1.0/test',                         't.bootstrap')
 
---test map
-map('^/test', 'test.test')
-
-map('^/hello%?name=(.*)',           'test.hello')
-map('^/longtext',                   'test.longtext')
-map('^/ltp',                        'test.ltp')
-map('^/ip',                         'ip.bootstrap')
-
--- timeline 
-map('^/timeline',                      'timeline.bootstrap')
-
--- business
-map('^/user',                      'user.bootstrap')
-
-map('^/goods',                      'goods.bootstrap')
-map('^/brand',                      'brand.bootstrap')
-map('^/comment',					'comment.bootstrap')
-map('^/notice',						'notice.bootstrap')
-
--- common 
-map('^/id',                         'id.bootstrap')
-map('^/version',                         'version.bootstrap')
-
--- image/file/audio storage
-map('^/upload', 					'storage.savetoweedfs')
-
--- save to hbase or hadoop
-map('^/service/soundget','sound.soundget')
-map('^/service/soundmake','sound.soundmake')
-
----------------------------------------------------------------------
 -- business interface list start
 map('^/1.0/version',                         'version.bootstrap')
 
@@ -160,6 +130,8 @@ map('^/1.0/geo/reverse_geocode','geo,reverse_geocode')
 map('^/1.0/geo/search','geo.search')
 map('^/1.0/geo/similar_places','geo.similar_places')
 map('^/1.0/geo/place','geo.place') --create a place
+
+
 
 
 

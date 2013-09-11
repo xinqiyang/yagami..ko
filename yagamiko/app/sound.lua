@@ -93,7 +93,7 @@ function soundmake( req,resp )
 			newsinfo['language'] = lang
 			newsinfo['postdate'] = urldecode(req.post_args['postdate'])
 
-			logger:i("--start-------------------\n"..tostring(newsid).."\n  "..tostring(newscontent).."\n   "..tostring(lang).."\n   "..tostring(newsinfo['postdate']).."\n")
+			--logger:i("--start-------------------\n"..tostring(newsid).."\n  "..tostring(newscontent).."\n   "..tostring(lang).."\n   "..tostring(newsinfo['postdate']).."\n")
 
 			if newscontent and lang then
 				validate = true
