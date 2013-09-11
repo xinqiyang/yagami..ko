@@ -124,7 +124,7 @@ function content()
    
     local uri         = ngx.var.REQUEST_URI
     
-    
+    --ngx.log(ngx.DEBUG,"\n************** request :"..uri.."   start ***********")
     local route_map   = ygm_vars.get(yagami_app_name, "ROUTE_INFO")['ROUTE_MAP']
     local route_order = ygm_vars.get(yagami_app_name, "ROUTE_INFO")['ROUTE_ORDER']
     local page_found  = false
