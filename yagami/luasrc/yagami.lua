@@ -23,11 +23,11 @@ function is_inited(app_name, init)
         return r_G['yagami_inited'][app_name]
     else
         r_G['yagami_inited'][app_name] = init
-        if init then
+        --if init then
             -- put logger into _G
             --local logger = require("yagami.logger")
             --r_G["logger"] = logger.logger()
-        end
+        --end
     end
 end
 
@@ -52,8 +52,6 @@ function setup_app()
     ygm_util.setup_app_env(ygm_home, app_name, app_path,
                           ygm_vars.vars(app_name))
 
-    --local logger = require("yagami.logger")
-        
     local config = ygm_util.loadvars(app_config)
     
     if not config then config={} end
@@ -65,7 +63,10 @@ function setup_app()
     if type(config.subapps) == "table" then
         for k, t in pairs(config.subapps) do
             local subpath = t.path
-            package.path = subpath .. '/app/?.lua;' .. package.path
+            package.path = subpath .. '/service/?.lua;' .. package.path
+            --add logic layer
+            package.path = subpath .. '/logic/?.lua;' .. package.path
+            ngx.log(ngx.DEBUG,package.path)
             local env = setmetatable({__CURRENT_APP_NAME__ = k,
                                       __MAIN_APP_NAME__ = app_name},
                                       --__LOGGER = logger.logger()},
@@ -102,7 +103,7 @@ function content()
         local ok, ret = pcall(setup_app)
         if not ok then
             local error_info = "YAGAMI APP SETUP ERROR: " .. ret
-            ngx.status = 500
+            ngx.status = ngx.HTTP_INTERNAL_SERVER_ERROR
             ngx.say(error_info)
             ngx.log(ngx.ERR, error_info)
             return
@@ -114,7 +115,7 @@ function content()
 
     if not is_inited(ngx_ctx.YAGAMI_APP_NAME) then
         local error_info = 'Can not setup YAGAMI APP: ' .. ngx_ctx.YAGAMI_APP_NAME
-        ngx.status = 501
+        ngx.status = ngx.HTTP_METHOD_NOT_IMPLEMENTED
         ngx.say(error_info)
         ngx.log(ngx.ERR, error_info)
         return
@@ -154,14 +155,14 @@ function content()
             elseif type(v) == "table" then
                 v:_handler(requ, resp, args)
             else
-                ngx.exit(500)
+                ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
             end
             break
         end
     end
 
     if not page_found then
-        ngx.exit(404)
+        ngx.exit(ngx.HTTP_BAD_REQUEST)
     end
 end
 
