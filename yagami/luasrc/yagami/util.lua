@@ -26,8 +26,8 @@ function setup_app_env(ygm_home, app_name, app_path, global)
 	global['YAGAMI_APP_PATH']=app_path
 
 	package.path = ygm_home .. '/lualibs/?.lua;' .. package.path
-	package.path = app_path .. '/app/?.lua;' .. package.path
-
+	package.path = app_path .. '/service/?.lua;' .. package.path
+	package.path = app_path .. '/logic/?.lua;' .. package.path
 
 	local request=require("yagami.request")
 	local response=require("yagami.response")
@@ -707,6 +707,17 @@ function init_args_simple()
 	return args,receive_headers
 end
 
+-- get args json
+-- support args of get/post by json
+function init_args_json()
+	local receive_headers = ngx.req.get_headers()
+	if "POST" == request_method then
+		ngx.req.read_body()
+	end
+	local body = ngx.req.get_body_data()
+	return receive_headers,body
+end
+
 --
 -- get init args 
 -- thank you for author of method
@@ -787,6 +798,12 @@ function init_args_request()
 	ngx.log(ngx.DEBUG,table_print(receive_headers))
 	ngx.log(ngx.DEBUG,table_print(body_data))	
 	return args,receive_headers,body_data
+end
+
+--validate the 
+function validate(str,rule)
+	
+	return false;
 end
 
 
